@@ -17,18 +17,31 @@ class TestCreateCourier:
     def test_create_duplicate_courier_false(self):
         payload = {"login": registrated_login,
                    "password": registrated_password,
-                   "firstName": registrated_firstName
-                   }
+                   "firstName": registrated_firstName}
         response = requests.post(PAGE_CREATE_COURIER, json=payload)
         assert response.status_code == 409
+
+    @allure.title('Текст ошибки создания дубликата курьера "Этот логин уже используется."')
+    def test_create_duplicate_courier_false(self):
+        payload = {"login": registrated_login,
+                   "password": registrated_password,
+                   "firstName": registrated_firstName}
+        response = requests.post(PAGE_CREATE_COURIER, json=payload)
+        assert response.json().get("message") == "Этот логин уже используется."
 
     @allure.title('Чтобы создать курьера, нужно передать в ручку все обязательные поля')
     def test_create_courier_whithout_login_false(self):
         payload = {"password": registrated_password,
-                   "firstName": registrated_firstName
-                   }
+                   "firstName": registrated_firstName}
         response = requests.post(PAGE_CREATE_COURIER, json=payload)
         assert response.status_code == 400
+
+    @allure.title('Текст ошибки при передачи не всех обязательных данных "Недостаточно данных для создания учетной записи"')
+    def test_create_courier_whithout_login_false(self):
+        payload = {"password": registrated_password,
+                   "firstName": registrated_firstName}
+        response = requests.post(PAGE_CREATE_COURIER, json=payload)
+        assert response.json().get("message") == "Недостаточно данных для создания учетной записи"
 
     @allure.title('Запрос возвращает правильный код ответа')
     def test_create_courier_success_code(self):
@@ -45,8 +58,7 @@ class TestCreateCourier:
     @allure.title('Если одного из полей нет, запрос возвращает ошибку')
     def test_create_courier_whithout_login_answer(self):
         payload = {"password": registrated_password,
-                   "firstName": registrated_firstName
-                   }
+                   "firstName": registrated_firstName}
         response = requests.post(PAGE_CREATE_COURIER, json=payload)
         assert response.json().get("message") == "Недостаточно данных для создания учетной записи"
 
@@ -54,7 +66,6 @@ class TestCreateCourier:
     def test_create_duplicate_courier_login_false(self):
         payload = {"login": registrated_login,
                    "password": registrated_password,
-                   "firstName": registrated_firstName
-                   }
+                   "firstName": registrated_firstName}
         response = requests.post(PAGE_CREATE_COURIER, json=payload)
         assert response.status_code == 409
